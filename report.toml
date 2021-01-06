@@ -1,0 +1,24 @@
+title = "gitleaks config"
+
+[[rules]]
+	description = "IPv4 addresses"
+	regex = '''\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b'''
+	tags = ["IPv4", "IP", "addresses"]
+	[rules.allowlist] 
+		regexes = ['''(169.254.169.254|127.0.0.\d+|23.22.13.113)''', # 23.22.13.113 is gsa.gov
+		'''\b0\.(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){2}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b''' # OK to start w/ 0.
+		]
+
+[[rules]]
+	description = "File name extensions of credentials"
+	file = '''(?i)\.(pgpass|pem|key)'''
+	tags = ["file"]
+
+[[rules]]
+	description = "File names of credentials"
+	file = '''(?i)^(id_rsa|passwd|pgpass|shadow)'''
+
+[allowlist]
+	description = "image allowlists"
+	files = ['''(.*?)(jpg|gif|doc|pdf|bin|svg)$''', '''development.bats''', '''caulked.bats''', '''local.toml''']
+	regexes	= ['''CHANGEME|changeme|feedabee|EXAMPLE|23.22.13.113|1234567890''']
