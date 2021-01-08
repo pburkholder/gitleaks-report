@@ -11,6 +11,9 @@
 #
 #              bats development.bats
 
+# v7 bugs: `[allowlist]...files` and `[[rules]].
+
+
 BATS_TMPDIR=${BATS_TMPDIR:-/tmp}     # set default if sourcing from cli
 REPO_PATH=$(mktemp -d "${BATS_TMPDIR}/gittest.XXXXXX")
 
@@ -37,6 +40,14 @@ testCommit7() {
 
 testCommit6() {
     ./gitleaks.6.2.0 --config=./report.toml --repo-path=${REPO_PATH} --uncommitted
+}
+
+@test "detects an ipv4 pattern to show v7 generally works" {
+    cat > $REPO_PATH/ipv4.txt <<END
+"102.9.31.24"
+END
+    run testCommit7 $REPO_PATH
+    [ ${status} -eq 1 ]
 }
 
 @test "version of 6.2.0" {
